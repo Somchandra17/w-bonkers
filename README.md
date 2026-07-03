@@ -21,6 +21,11 @@
 
 </div>
 
+<div align="center">
+  <img src="docs/images/they-dont-know.png" alt="They don't know: my AI wakes up before me. it trades while I sleep. if it works, I'm a genius. if it doesn't, it's experimental." width="640"><br/>
+  <sub>Accuracy note: it never actually places a trade — you do, every single one. The vibe, however, is 100% correct.</sub>
+</div>
+
 > [!NOTE]
 > **Field status:** born July 2026. The author has been running it on his own money since day one — in its first week it executed the plan exactly as designed and hit the targets he set, safely. It is still a very new project: read the code, start small, size your trust accordingly.
 
