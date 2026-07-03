@@ -13,7 +13,12 @@ Everything the refresh command treats as FIXED lives in `state.json → meta.pin
   "indicators": "RSI(14 Wilder), MACD(12,26,9), SMA 20/50/200, ATR(14), ...",
   "add_zone":   "Nifty 22,800-23,000",   // index zone where buffer deploys
   "min_switch_composite": 75,
-  "anti_whipsaw_days": 10
+  "anti_whipsaw_days": 10,
+  "regime_gate": {                        // defer NEW buys while the index is below its 200-DMA
+    "enabled": true,                      // exits/trims/stops are never gated; set false to opt out
+    "benchmark_index": "NIFTY 50",        // evidence: docs/BACKTEST.md
+    "no_new_buys_below": "200-DMA"
+  }
 }
 ```
 Edit these (or tell your agent to), run `python3 scripts/render_plan.py --check`, done. **Never edit the installed command file to change strategy** — the command reads state at runtime, so your changes survive upgrades.
