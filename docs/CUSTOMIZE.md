@@ -18,10 +18,18 @@ Everything the refresh command treats as FIXED lives in `state.json → meta.pin
 ```
 Edit these (or tell your agent to), run `python3 scripts/render_plan.py --check`, done. **Never edit the installed command file to change strategy** — the command reads state at runtime, so your changes survive upgrades.
 
-## Swap Todoist for anything
-The sync payload (`todoist_tasks.json`) is deliberately tool-agnostic: `ref`, `title`, `due`, `description`. Tell your agent:
-> "Replace the Todoist layer with **Linear/Notion/TickTick/a local FEEDBACK.md** — update STEP 1 and STEP 6 of my `/<command>` file to read/write it, keep the exactly-once comment semantics and the tick-means-FILLED rule."
+## Swap ANY service — the seams are deliberate
+Every external service sits behind a narrow seam in the command file. Open your agent and ask; it rewires the seam and everything else keeps working.
+
+**Task tool (Todoist → Linear/Notion/TickTick/a local file):** the sync payload (`todoist_tasks.json`) is deliberately tool-agnostic — `ref`, `title`, `due`, `description`. Tell your agent:
+> "Replace the Todoist layer with **Linear** — update STEP 1 and STEP 6 of my `/<command>` file to read/write it, keep the exactly-once comment semantics and the tick-means-FILLED rule."
 That's the whole seam: one read step, one write step, same payload.
+
+**Data source (Groww MCP → your broker's MCP):** the market-data seam is STEP 3 of the command (prices, holdings, margins, movers) plus the STEP 0 preflight check. Tell your agent:
+> "Swap the Groww MCP for **<your broker's MCP>** — map `get_ltp`/holdings/margins to its equivalents in STEP 0/1b/3, keep yfinance as the fallback and the read-only-for-trading rule."
+Anything that exposes prices + your holdings works (Zerodha/Kite, Upstox, a custom MCP). Keep the guardrail: the agent must never gain order-placement powers.
+
+**Scheduler:** cron, launchd, or any always-on agent runner — see SCHEDULING.md; the contract is one shell line.
 
 ## Different strategy than rotation?
 v1's STEP-4 rules are **momentum/rotation-shaped** (EXIT&SWITCH on broken thesis, VCP-composite replacements, add-zone dips). They live as plain text in your installed command file — ask your agent to re-derive them for your style (e.g. "rewrite STEP 4 as a monthly SIP-plus-rebalance rule set; keep the propose-don't-auto-touch rule for held positions and the NO-CHANGE default"). Keep the invariants: state.json is truth, renderer is the only view-writer, default is NO CHANGE.

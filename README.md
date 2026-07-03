@@ -1,11 +1,28 @@
-# w-bonkers
+<div align="center">
 
-**Your AI agent runs your stock plan on rails. You just take the W.**
+<h1>w-bonkers</h1>
 
-[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Agents: Claude Code · Codex](https://img.shields.io/badge/agents-Claude%20Code%20·%20Codex-blueviolet.svg)](docs/PREREQUISITES.md)
-[![Market: NSE India](https://img.shields.io/badge/market-NSE%20India-orange.svg)](docs/PIPELINE.md)
-[![made by somm.tf](https://img.shields.io/badge/made%20by-somm.tf-black.svg)](https://somm.tf)
+<p><b>Your AI agent runs your stock plan on rails. You just take the W.</b></p>
+
+<p>
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT License"></a>
+<a href="docs/PREREQUISITES.md"><img src="https://img.shields.io/badge/agents-Claude%20Code%20·%20Codex-blueviolet.svg" alt="Agents: Claude Code · Codex"></a>
+<a href="docs/PIPELINE.md"><img src="https://img.shields.io/badge/market-NSE%20India-orange.svg" alt="Market: NSE India"></a>
+<a href="https://somm.tf"><img src="https://img.shields.io/badge/made%20by-somm.tf-black.svg" alt="made by somm.tf"></a>
+</p>
+
+<p>
+<a href="#install">Install</a> ·
+<a href="#how-it-works">How it works</a> ·
+<a href="#what-it-looks-like-after-setup">Screenshots</a> ·
+<a href="#the-daily-loop">Daily loop</a> ·
+<a href="docs/">Docs</a>
+</p>
+
+</div>
+
+> [!NOTE]
+> **Field status:** born July 2026. The author has been running it on his own money since day one — in its first week it executed the plan exactly as designed and hit the targets he set, safely. It is still a very new project: read the code, start small, size your trust accordingly.
 
 ## The problem
 
@@ -22,32 +39,50 @@ It turns Claude Code or Codex into a disciplined portfolio copilot for NSE cash 
 
 The core trick: **your plan is data, not vibes.** State lives in `state.json`, a deterministic Python script renders every view, and the agent may edit that state only when your feedback or a hard rule says so. Same state in, same board out — every run, any model.
 
-> **Education only.** Not investment advice, not SEBI-registered. The agent never places orders (the broker MCP is read-only for trading) — you place every trade and confirm live prices.
+> [!WARNING]
+> **Education only.** Not investment advice, not SEBI-registered. The agent never places orders (the broker MCP is read-only for trading) — you place every trade and confirm live prices. Markets can go bonkers too; risk only what you can afford to lose.
 
 ## How it works
 
+A day in the life, in plain language:
+
 ```mermaid
 flowchart TD
-  U["you: fills, ticks, comments"] --> T["Todoist project"]
-  SCHED["scheduler: dated task / cron gate"] -.->|triggers| C["/your-command · full or quick"]
-  T -->|"STEP 1 · feedback FIRST — each comment applied exactly once"| C
-  C --> S3["STEP 3 · fresh data"]
-  G["Groww MCP · primary"] --> S3
-  Y["yfinance · fallback"] -.-> S3
-  K["skills: VCP screens · TA · news queries · FII/DII · breadth · scenarios"] --> S3
-  S3 --> R{"STEP 4 · rules — default: NO CHANGE"}
-  R -->|"HOLD / EXIT+SWITCH / TRIM / ADD — held=propose, pending=auto"| ST["state.json — single source of truth"]
-  ST --> RP["render_plan.py — validate + render"]
-  RP --> V["board.html · tasks.md · tasks.ics · todoist payload"]
-  RP --> A["runs/ archive · CHANGELOG · RUNBOOK · MANIFEST"]
-  V -->|"STEP 6 · upsert — complete on FILL only"| T
-  ST -->|"next_review"| SCHED
+  A["You run /w-bonkers —<br/>or it wakes up on schedule"] --> B["First it reads YOUR updates:<br/>what filled? any comments like<br/>'raise stop to 320'?"]
+  B --> C["Then it checks the market:<br/>prices, news on your stocks,<br/>the overall mood"]
+  C --> D{"Does anything actually<br/>need to change?"}
+  D -->|"most days: no"| E["Plan stays exactly as it was —<br/>prices and dates just refresh"]
+  D -->|"a stock broke its rules:<br/>fell past its stop, bad news"| F["It proposes: exit this one,<br/>here's a stronger candidate —<br/>YOU approve the big calls"]
+  D -->|"you gave an instruction"| G["It applies your instruction —<br/>exactly once, then confirms"]
+  E --> H["Your Todoist updates: every order<br/>with its buy price, stop-loss<br/>and target spelled out"]
+  F --> H
+  G --> H
+  H --> I["You place the trades in your broker<br/>app and tick tasks when they FILL"]
+  I --> J["Everything is saved to local files,<br/>and it tells you when to run it next"]
+  J -.-> A
 ```
 
-Two invariants make it drift-proof ([docs/PIPELINE.md](docs/PIPELINE.md)):
+Engineers: the full technical loop (state machine, rules, render pipeline) is in [docs/PIPELINE.md](docs/PIPELINE.md). The two invariants that make it drift-proof: **`state.json` is the single source of truth** (the agent edits data, never views) and **`render_plan.py` is the only view-writer** (same state, byte-identical board, every run).
 
-1. **`state.json` is the single source of truth** — the agent edits data, never views.
-2. **`render_plan.py` is the only view-writer** — same state, byte-identical board, every run.
+## What it looks like after setup
+
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <img src="docs/images/task-detail.png" alt="A Todoist task with buy zone, stop-loss and target" width="340"><br/>
+      <sub><b>Every order arrives as a task</b> — buy zone, stop-loss, target, position size and the why. You just mirror it in your broker app.</sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="docs/images/report-mobile.png" alt="Completed tasks for the week on mobile" width="340"><br/>
+      <sub><b>Tick when filled</b> — the plan reconciles every tick against your broker holdings on the next run.</sub>
+    </td>
+  </tr>
+</table>
+
+<div align="center">
+  <img src="docs/images/report-desktop.png" alt="One week of completed plan tasks in Todoist" width="900"><br/>
+  <sub><b>One week of the author's live plan</b> — fund redemptions, two stock buys, a monthly review and an admin task, all driven by the loop.</sub>
+</div>
 
 ## Prerequisites
 
@@ -86,6 +121,9 @@ Three modes ([docs/SCHEDULING.md](docs/SCHEDULING.md)): a **dated Todoist task**
 5 16 * * 1-5  $HOME/stocks/scripts/run_refresh.sh claude quick
 ```
 
+> [!TIP]
+> **Put your plan on your calendar.** Todoist has a native two-way Google Calendar sync — your dated buy/review tasks show up there automatically. Not on Google? The engine also generates `tasks.ics`; import or subscribe to it from any calendar app.
+
 ## Your data stays yours
 
 Committed = code, templates, docs. **Generated = yours and gitignored**: `state.json`, `personal/` (your PDFs and conversions), `runs/` (every fetch archived), `RUNBOOK.md` (offline manual), `CHANGELOG.md`, rendered views. A `git push` physically can't include them — and don't `git add -f`.
@@ -93,7 +131,7 @@ Committed = code, templates, docs. **Generated = yours and gitignored**: `state.
 ## Customize
 
 - **Strategy inputs** (universe, screen params, add-zone) live in `state.json → meta.pinned` — edit data, not code. [docs/CUSTOMIZE.md](docs/CUSTOMIZE.md)
-- **Don't like Todoist?** After setup, tell your agent: *"swap the Todoist layer for Linear / Notion / a local file"* — the sync payload is tool-agnostic and the seam is one read step plus one write step.
+- **Every service is swappable — just ask your AI.** Don't use Groww? Tell your agent to swap the data layer for your broker's MCP (Zerodha, Upstox, anything exposing prices + holdings). Don't like Todoist? *"Swap the Todoist layer for Linear / Notion / a local file."* The seams are deliberate — one read step, one write step, a tool-agnostic payload. Recipes in [docs/CUSTOMIZE.md](docs/CUSTOMIZE.md).
 - **Different strategy?** v1 rules are rotation/momentum-shaped; the rule text lives in your command file — prompt your agent to re-derive them. Keep the invariants.
 
 ## Upgrading
@@ -111,4 +149,4 @@ Built by **[Som Chandra](https://somm.tf)** — a security engineer who got tire
 
 ## License
 
-MIT — see [LICENSE](LICENSE). Markets can go bonkers too; risk only what you can afford to lose.
+MIT — see [LICENSE](LICENSE).

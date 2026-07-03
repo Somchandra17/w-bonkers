@@ -2,6 +2,26 @@
 
 Read this to understand *why* w-bonkers behaves the way it does. These are laws, not suggestions; every component depends on them.
 
+## The full loop, technically
+
+```mermaid
+flowchart TD
+  U["you: fills, ticks, comments"] --> T["Todoist project"]
+  SCHED["scheduler: dated task / cron gate"] -.->|triggers| C["/your-command · full or quick"]
+  T -->|"STEP 1 · feedback FIRST — each comment applied exactly once"| C
+  C --> S3["STEP 3 · fresh data"]
+  G["Groww MCP · primary"] --> S3
+  Y["yfinance · fallback"] -.-> S3
+  K["skills: VCP screens · TA · news queries · FII/DII · breadth · scenarios"] --> S3
+  S3 --> R{"STEP 4 · rules — default: NO CHANGE"}
+  R -->|"HOLD / EXIT+SWITCH / TRIM / ADD — held=propose, pending=auto"| ST["state.json — single source of truth"]
+  ST --> RP["render_plan.py — validate + render"]
+  RP --> V["board.html · tasks.md · tasks.ics · todoist payload"]
+  RP --> A["runs/ archive · CHANGELOG · RUNBOOK · MANIFEST"]
+  V -->|"STEP 6 · upsert — complete on FILL only"| T
+  ST -->|"next_review"| SCHED
+```
+
 ## The two invariants
 1. **`state.json` is the single source of truth.** Positions, levels, buckets, regime, pinned inputs, the next-review date — everything lives there. Rendered views, Todoist tasks, calendars are *projections* of it. If a view disagrees with state, the view is wrong.
 2. **`scripts/render_plan.py` is the only view-writer.** Same state.json → byte-identical output, every run, forever. The agent edits *data*; a deterministic script produces *views*. This kills LLM drift: two runs on the same day produce the same board, not two creative rewrites.

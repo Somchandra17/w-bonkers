@@ -31,3 +31,12 @@ Install with `crontab -e` (the installer offers to do it for you, showing the ex
 Cron does the work; the ⏰ Todoist task remains your visible calendar (its description notes "cron armed — will auto-run on this date; comment here to talk to the next run"). If cron dies silently, the dated task still nudges you — a free dead-man switch.
 
 Switch modes anytime: tell your agent *"switch my scheduling to cron/both/todoist"* — it updates `meta.schedule_mode` and the crontab.
+
+## Calendar sync (bonus)
+
+Your dated actions can live on your calendar too, two ways:
+
+- **Todoist ↔ Google Calendar (native, two-way):** enable the Google Calendar integration in Todoist settings → your dated buy/review tasks (including the "run next" reminder) appear as calendar events, and completing/moving them syncs back. Zero extra setup on the w-bonkers side — the tasks are already dated.
+- **Any other calendar (`tasks.ics`):** every render regenerates `tasks.ics` in the plan folder — import it into Apple/Outlook/anything, or subscribe to it for auto-updates if you serve the folder somewhere private. Each dated action becomes an all-day event with the buy/stop/target in the description.
+
+Both are read-side conveniences: the source of truth stays `state.json`, and the feedback loop stays in Todoist.
