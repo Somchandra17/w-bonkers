@@ -40,7 +40,10 @@ STEP 3  Fresh data       — broker MCP primary (prices, holdings, margins, move
 STEP 4  Rules            — DEFAULT = NO CHANGE. EXIT&SWITCH only on: stop breached / thesis-breaking news /
                            trend broken. TRIM on target or RSI>80. ADD only inside the add-zone. Held
                            positions are never auto-changed — proposals only. Anti-whipsaw: a switch can't
-                           be reversed for N trading days unless stopped out.
+                           be reversed for N trading days unless stopped out. Regime gate (pinned, optional,
+                           default on for new installs): while the benchmark index closes below its 200-DMA,
+                           new-name buys and ADDs are deferred to the watchlist — exits are never gated
+                           (evidence: docs/BACKTEST.md).
 STEP 5  Persist + render — edit state.json; bump rev ONLY on real change; run render_plan.py (validates:
                            buckets == corpus, stop < entry < target); archive EVERYTHING fetched into
                            runs/<date>/ (the folder must stay usable offline and by other agents).

@@ -33,11 +33,16 @@ Splitting the same trades by where the index sat at entry:
 | Above | 341 | +6.13% | 2.28 |
 | Below | 28 | −1.08% | 0.74 |
 
-Entries taken below the index 200-SMA were net losers under every exit ruleset. If you want to
-act on this, two additions that fit the `meta.pinned` philosophy (edit data, not the command) —
-suggested only, not wired by this PR: a market-zone entry gate (full size above the 200-SMA,
-reduced or none below) and a weekly loss budget (pause new entries once realized losses in a
-rolling week exceed a set % of corpus).
+Entries taken below the index 200-SMA were net losers under every exit ruleset. This finding is
+now wired as **`meta.pinned.regime_gate`** (this PR): while the benchmark index closes below its
+200-DMA, new-name buys and ADDs are deferred to the watchlist and re-promoted when the index
+reclaims the line — exits, trims and user instructions are never gated. New installs default it
+on; **existing plans opt in** by adding the `regime_gate` block from `templates/state.template.json`
+to their `state.json → meta.pinned` (or opt out with `"enabled": false`).
+
+A second idea that fits the pinned philosophy but ships as a suggestion only (untested here): a
+weekly loss budget — pause new entries once realized losses in a rolling week exceed a set % of
+corpus. It bounds variance; it does not create edge. Backtest it before trusting it.
 
 ## Run it
 
