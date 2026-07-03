@@ -20,6 +20,8 @@
     "state.json.bak": "backup written by render_plan.py on each render",
     "scripts/render_plan.py": "deterministic renderer + validator (--check). Regenerates all views from state.json.",
     "scripts/run_refresh.sh": "cron wrapper — gates on meta.next_review.date, then runs the agent headlessly",
+    "scripts/backtest_vcp.py": "OFFLINE analysis tool (not a pipeline step): point-in-time backtest comparing exit rulesets on identical breakout entries; run before/after changing pinned rule inputs",
+    "docs/BACKTEST.md": "backtested evidence for the STEP-4 exit rules + how to re-run the harness and re-validate after a strategy change",
     "CHANGELOG.md": "append-only decision history; one dated entry per run explaining what changed and why",
     "board.html": "standalone action board; opens offline in any browser",
     "_artifact-source.html": "body-only variant for an optional hosted artifact (meta.artifact_url)",
