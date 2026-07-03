@@ -26,6 +26,7 @@ The agent converts each PDF to markdown under `personal/` using its own reading 
 - Proposes: buckets (stocks / optional fund sleeve / optional event earmark / cash-dip buffer — summing exactly to your corpus), positions with 🟢 buy zone / 🔴 stop / 🎯 target / share counts, a watchlist.
 - You iterate in plain language ("drop X", "smaller Y", "stop 320 on Z") until you approve.
 - Then: `state.json` is built, views render, your Todoist project fills up, your command (`/w-bonkers` by default — you pick the name) is installed, scheduling is set. First review date lands as a ⏰ task.
+- **It ends with a summary you can actually read:** your goal, your money split, every position as "buy X, exit below Y, book profit at Z", how you'll use it day to day, and what it will never do. Then one question — *"want to customize anything?"* — tweak whatever you like, or say **"all good"** and you're live.
 
 ## Privacy promises
 - Personal docs, plan state, run archives: **local files in this folder**, all gitignored — `git push` physically can't include them.

@@ -81,5 +81,16 @@ Run and show each check:
 - [ ] skills 6/6 present; Groww + Todoist MCPs respond
 - [ ] **`git status --porcelain` lists NO user files** (state.json, personal/, runs/, RUNBOOK, MANIFEST, CHANGELOG, install.json all ignored — print proof)
 - [ ] if cron: `crontab -l` shows the line; `scripts/run_refresh.sh <agent> quick` dry-runs to "not due yet"
-Then hand off, verbatim-ish:
-> **"You're live at Rev 1.** 📌 Tick a BUY task only when it FILLS — not when you place the order. 💬 Comment on any task to instruct the next run ('bought at 332', 'raise stop to 320', 'skip'). ⏰ First review: {date} — or just run `/{command}` anytime. Your board: {folder}/board.html. Take the W."
+All boxes proven → move to Phase 10 (never end the install on this checklist).
+
+## Phase 10 — Plain-language summary, customization check, go-live (the real ending)
+1. Present **"Here's what you now have"** — plain language a non-technical person fully understands. No jargon, no file paths except the two that matter. Fill this template from state.json:
+   > **Your goal:** {goal} — {corpus} over ~{horizon} months, {risk} risk.
+   > **Your money:** {X} goes into {N} stocks — each with a buy price, an exit-if-it-falls price, and a take-profit price. {Y} stays as cash for dips (deployed only if the index falls into {add_zone}). {Z} is earmarked for {event/fund, if any}. Your keep-list ({items}) is never touched.
+   > **Your positions, one line each:** "{TICKER} — buy {entry}, exit if it closes below {stop} (risk ~{pct}%), book profit at {target}" — list every leg, dated and trigger-based separately.
+   > **Day to day:** your orders live as tasks in the Todoist project "{project}". Place trades in your broker app → tick a task only when it FILLS → comment to give instructions ("bought at 332", "raise stop to 320"). Your visual board: {folder}/board.html — works offline. If everything digital vanished tomorrow, RUNBOOK.md shows how to run the plan by hand.
+   > **Your command:** /{command} — run it anytime. Scheduling: {schedule_mode}; first review {date}.
+   > **What it will never do:** place orders, sell a held position without your explicit approval, touch the keep-list, or spend the dip buffer outside its zone.
+2. Then ask, verbatim: *"Before you go live — want to customize anything? Common tweaks: rename the command · change the Todoist project name · adjust any stop / target / position size · add or drop a stock or theme · change scheduling (todoist / cron / both) · swap a whole service (see docs/CUSTOMIZE.md). Tell me what to change — or say **'all good'**."*
+3. **If they request changes:** apply them properly — edit `state.json` → `python3 scripts/render_plan.py` → re-sync the affected Todoist tasks → update `install.json` if an interview answer changed — then re-show only the changed lines of the summary and ask again.
+4. **On "all good"**, close with: *"You're ready. Run **/{command}** whenever you like — or just wait for the first review on {date}. Tick on fills, comment to steer. Take the W."*

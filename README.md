@@ -114,6 +114,8 @@ Read prompt.md and execute it.
 
 That's the whole install. `prompt.md` drives everything from here: it checks your tooling and **installs + authorizes what's missing** (the Groww MCP setup includes a one-time browser OAuth — log in, click Allow; read-only access, ~7-hour sessions. Todoist asks for its login the same way), converts any PDFs you dropped in, interviews you, proposes your opening book for approval, installs your command, fills Todoist, and sets up scheduling. About 15 minutes.
 
+It ends the way it should: a **plain-language summary of your whole setup** — your goal, your money split, every position's buy / exit / take-profit line, what the system will never do — followed by *"want to customize anything?"*. Say what to change, or say **"all good"** and start running `/w-bonkers`.
+
 ### The interview — what it asks (with examples)
 
 | It asks | Example answer |
