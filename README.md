@@ -40,7 +40,7 @@ Two invariants make it drift-proof ([docs/PIPELINE.md](docs/PIPELINE.md)):
 | What | Why | Setup |
 |---|---|---|
 | Claude Code **or** Codex CLI | the agent that runs everything | [docs/PREREQUISITES.md](docs/PREREQUISITES.md) |
-| **Groww MCP** | live prices, holdings, margins | needs a Node-22 `mcp-remote` wrapper on port `52155` — recipe in PREREQUISITES §2 |
+| **Groww MCP** | live prices, **stock** holdings, margins *(MFs aren't exposed — you provide them at install, see ONBOARDING)* | needs a Node-22 `mcp-remote` wrapper on port `52155` — recipe in PREREQUISITES §2 |
 | **Todoist MCP** *(required)* | the feedback loop + reminders | PREREQUISITES §3 — swappable later, see below |
 | **indian-trading-skills** pack | VCP screener, TA, news, flows, breadth, scenarios | auto-installed by the installer |
 | python3 + `yfinance` | renderer + fallback prices | `pip3 install yfinance pandas niftystocks` |

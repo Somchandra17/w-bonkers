@@ -28,6 +28,8 @@ Print a live ✅/❌ checklist and resolve every ❌ before moving on (each: fix
 Ask: *"Drop any personal finance docs into this folder now — salary/CTC PDF, broker statements, a portfolio.md, notes. Everything stays local and gitignored. Tell me when done (or say 'none')."*
 For each PDF found: read it with your own document reading (no pdf libraries), write a faithful markdown conversion to `personal/<slug>.md` (frontmatter: source filename + conversion date), move the original into `personal/`, and summarize what you extracted in 2–3 lines for confirmation. Salary docs: extract CTC structure, tax regime, deductions — this feeds the optional `tax` block later.
 
+**Mutual funds (explicit step — do not skip):** the Groww MCP exposes **stock holdings only** — it cannot read the user's mutual-fund portfolio. Say so, then ask: *"If you want mutual funds tracked in this plan (a fund sleeve, SIPs, or a keep-list), upload a screenshot or statement of your MF holdings — or just type them: fund name, invested amount / units, current value. Groww's MCP can't see them, so this is the only way. (or say 'no funds')."* Read whatever they provide (screenshots via your vision) and write `personal/mutual-funds.md`. This file becomes the source for state.json's `fund` block and `keep_not_rotated` — and every future refresh tracks MF legs from the user's ticks/comments only, never from broker data.
+
 ## Phase 3 — Goal interview
 Ask in order (accept free text; push gently for numbers):
 1. *"What's the W you're chasing? One or two lines — with numbers if you have them (corpus, target %, timeframe)."*
@@ -41,7 +43,7 @@ Ask in order (accept free text; push gently for numbers):
 Record all answers in `install.json`.
 
 ## Phase 4 — Portfolio analysis → plan proposal
-1. Pull live holdings + margins (Groww), fundamentals for held names, index level + VIX.
+1. Pull live holdings + margins (Groww — **stocks only**; merge the mutual-fund picture from `personal/mutual-funds.md` for the full portfolio), fundamentals for held names, index level + VIX.
 2. Build the proposed **universe**: user themes + current holdings + liquid leaders in those themes (~30–40 NSE names). Run the `nse-vcp-screener` skill over it (params: `--trend-min-score 55 --min-contractions 2 --contraction-ratio 0.8`) and `technical-analyst` indicators on candidates.
 3. Derive the opening book sized to risk appetite: **buckets** (e.g. stocks / optional fund sleeve / optional event earmark / cash-dip buffer) **summing exactly to the corpus**, positions with 🟢 entry zone / 🔴 stop / 🎯 target / share counts / one-line reasons, an add-zone (~5–7% below the current index, confirmable), a watchlist. Market closed → anchor to last close and say so.
 4. Present it as a table + bucket math. Ask: *"Reply **approve**, or tell me changes ('drop X', 'smaller Y', 'stop 320 on Z')."* Iterate until approved.

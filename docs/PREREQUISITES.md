@@ -31,6 +31,8 @@ command = "/Users/YOU/.local/bin/groww-mcp.sh"
 ```
 First connect opens a browser OAuth (click Allow). **Groww issues no refresh tokens — sessions last ~7 hours**; when expired, mcp-remote re-opens the browser on next use. Tokens cache in `~/.mcp-auth/`. This matters for cron mode — see [SCHEDULING.md](SCHEDULING.md).
 
+**Scope note — stocks only:** the Groww MCP reads your *equity* holdings, prices, margins and movers; it does **not** expose your mutual-fund portfolio (it can only look up public fund details/NAVs). If you want MFs in your plan, the installer explicitly asks you to provide them (screenshot / statement / typed) — and refresh runs track those legs from your Todoist ticks & comments, never from broker data.
+
 ## 3. Todoist MCP (the feedback loop — REQUIRED)
 The plan talks to you through a Todoist project: tasks carry 🟢 buy / 🔴 stop / 🎯 target; **your ticks and comments are the input for the next run** ([FEEDBACK.md](FEEDBACK.md)). Install the official Todoist MCP (https://developer.todoist.com/ → MCP) and register it on your platform like above. After setup you can swap Todoist for another tool — see [CUSTOMIZE.md](CUSTOMIZE.md).
 

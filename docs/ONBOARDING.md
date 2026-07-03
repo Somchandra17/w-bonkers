@@ -6,6 +6,7 @@ INSTALL.md is executed by your agent, not by you — but it's *about* you. Two m
 Copy into this folder (they stay local — everything personal is gitignored and never leaves your machine):
 - **Salary slip / CTC PDF** — lets the plan factor taxes (e.g. India's New-Regime + employer-NPS lever) into its advice.
 - **Portfolio export or notes** (`portfolio.md`, broker statements) — what you already hold, average prices.
+- **Mutual-fund holdings — screenshot or statement.** ⚠️ The Groww MCP can only read your **stock** holdings; it cannot see your mutual funds. If you want funds tracked (a fund sleeve, SIPs, a keep-list), you *must* provide them — a screenshot of your MF screen, a statement PDF, or just type them during the interview (fund name, invested amount, current value). No upload = the plan manages stocks only.
 - Anything else money-relevant (goals doc, EMI notes).
 
 The agent converts each PDF to markdown under `personal/` using its own reading — no libraries, no upload to third parties beyond your chosen AI provider.
