@@ -18,6 +18,12 @@ Everything the refresh command treats as FIXED lives in `state.json → meta.pin
     "enabled": true,                      // exits/trims/stops are never gated; set false to opt out
     "benchmark_index": "NIFTY 50",        // evidence: docs/BACKTEST.md
     "no_new_buys_below": "200-DMA"
+  },
+  "portfolio_brakes": {                   // book-level limits — defer buys / raise proposals, never auto-sell
+    "enabled": true,
+    "open_risk_cap_pct": 2,               // max Σ(entry−stop)×qty as % of corpus
+    "weekly_loss_budget_pct": 2,          // week's losses beyond this → no new buys till next week
+    "circuit_breaker_dd_pct": 12          // book −12% from peak → halt buys + de-risk proposal
   }
 }
 ```
@@ -35,6 +41,13 @@ That's the whole seam: one read step, one write step, same payload.
 Anything that exposes prices + your holdings works (Zerodha/Kite, Upstox, a custom MCP). Keep the guardrail: the agent must never gain order-placement powers.
 
 **Scheduler:** cron, launchd, or any always-on agent runner — see SCHEDULING.md; the contract is one shell line.
+
+## Softer regime gate (probation sizing)
+The default gate defers new buys entirely below the 200-DMA. Prefer half-size probation instead (buy below the line, but at 50% size with tighter stops)? Tell your agent:
+> "Change my regime gate's action from 'defer to watchlist' to 'half-size probation': below the 200-DMA, new buys size at 50% with stops tightened one ATR; full size resumes above the line. Update STEP 4 of my command file and note it in state.meta.pinned.regime_gate."
+
+## Funds and IPOs are first-class
+Not stocks-only: the schema ships optional `fund` (mutual-fund sleeve) and `ipo` (event earmark) blocks — the renderer and command handle both (the author's own plan runs an MF sleeve and an IPO earmark). Set them during install (drop an MF screenshot in Phase 2) or later by editing `state.json`.
 
 ## Different strategy than rotation?
 v1's STEP-4 rules are **momentum/rotation-shaped** (EXIT&SWITCH on broken thesis, VCP-composite replacements, add-zone dips). They live as plain text in your installed command file — ask your agent to re-derive them for your style (e.g. "rewrite STEP 4 as a monthly SIP-plus-rebalance rule set; keep the propose-don't-auto-touch rule for held positions and the NO-CHANGE default"). Keep the invariants: state.json is truth, renderer is the only view-writer, default is NO CHANGE.

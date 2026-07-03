@@ -40,6 +40,13 @@
         "enabled": true,
         "benchmark_index": "NIFTY 50",
         "no_new_buys_below": "200-DMA"
+      },
+      "portfolio_brakes": {
+        "_comment": "Book-level risk limits (idea credit: kiraa06's jot comparison). Breaching any brake DEFERS new buys and raises a proposal task — exits, trims, stops and user instructions are never gated, and nothing is ever auto-sold. Set enabled:false to opt out.",
+        "enabled": true,
+        "open_risk_cap_pct": 2,
+        "weekly_loss_budget_pct": 2,
+        "circuit_breaker_dd_pct": 12
       }
     },
     "bucket_labels": {
@@ -52,6 +59,7 @@
     "note": "{{REGIME_NOTE}}"
   },
   "tax": null,
+  "_comment_fund_ipo": "Optional FIRST-CLASS legs (not stocks-only): set `fund` to a mutual-fund sleeve {name, amount_inr, status, due, note} and/or `ipo` to an event earmark {name, earmark_inr, topup_to_inr, window, status, trigger, note}. Renderer and command handle both; leave null if unused.",
   "buckets_inr": {
     "_comment_delete_me": "REPLACE with your buckets. Keys are yours to choose (e.g. stocks / fund_sleeve / event_earmark / dip_buffer). Values MUST sum exactly to meta.corpus_inr — the renderer validates this.",
     "stocks": 0,

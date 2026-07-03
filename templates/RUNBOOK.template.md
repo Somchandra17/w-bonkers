@@ -26,6 +26,7 @@ _Last updated: {{INSTALL_DATE}} (Rev 1). If `state.json` disagrees with this fil
 - **ADD** small only if: held + above all 3 MAs + RSI 50–65 + index in the add-zone + buffer free.
 - **Else HOLD.** Default is always NO CHANGE. Anti-whipsaw: never reverse a switch within 10 trading days unless its stop is hit.
 - **Regime gate** (if enabled in your plan): the index closed below its own 200-day average → sell what the rules say to sell, but buy NOTHING new — replacement buys wait on the watchlist until the index reclaims the line. Exits are never gated.
+- **Portfolio brakes** (if enabled): stop buying when the book's total open risk (sum of entry-minus-stop across positions) exceeds its cap, when this week's losses blow the weekly budget, or when the book falls the circuit-breaker % from its peak — in that last case, consciously decide what to trim. Selling is never automatic.
 - **Tick a BUY task only when it FILLS**, not when you place the order.
 
 ## News check per holding (any browser, ~2 min each)

@@ -163,6 +163,7 @@ Committed = code, templates, docs. **Generated = yours and gitignored**: `state.
 - **Strategy inputs** (universe, screen params, add-zone) live in `state.json → meta.pinned` — edit data, not code. [docs/CUSTOMIZE.md](docs/CUSTOMIZE.md)
 - **Every service is swappable — just ask your AI.** Don't use Groww? Tell your agent to swap the data layer for your broker's MCP (Zerodha, Upstox, anything exposing prices + holdings). Don't like Todoist? *"Swap the Todoist layer for Linear / Notion / a local file."* The seams are deliberate — one read step, one write step, a tool-agnostic payload. Recipes in [docs/CUSTOMIZE.md](docs/CUSTOMIZE.md).
 - **Different strategy?** v1 rules are rotation/momentum-shaped; the rule text lives in your command file — prompt your agent to re-derive them. Keep the invariants — and re-validate your new rules with the backtest harness first: [docs/BACKTEST.md](docs/BACKTEST.md) (the current STEP-4 exits carry backtested evidence; yours should too).
+- **Built-in restraint** — a regime gate (no new buys below the index's 200-DMA) and portfolio brakes (open-risk cap, weekly loss budget, drawdown circuit breaker) ship default-on; every one defers or proposes, never auto-sells, and each is one key to loosen or disable. Mutual-fund and IPO legs are first-class too — the engine deliberately holds cash; "fully invested" is not the goal.
 
 ## Upgrading
 

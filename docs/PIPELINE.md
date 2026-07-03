@@ -43,7 +43,10 @@ STEP 4  Rules            — DEFAULT = NO CHANGE. EXIT&SWITCH only on: stop brea
                            be reversed for N trading days unless stopped out. Regime gate (pinned, optional,
                            default on for new installs): while the benchmark index closes below its 200-DMA,
                            new-name buys and ADDs are deferred to the watchlist — exits are never gated
-                           (evidence: docs/BACKTEST.md).
+                           (evidence: docs/BACKTEST.md). Portfolio brakes (pinned, optional, default on):
+                           open-risk cap, weekly loss budget, drawdown circuit breaker — a breach defers
+                           new buys or raises a de-risk PROPOSAL; nothing is ever auto-sold. A held position
+                           breaking its exit rules raises a p1 "PROPOSED EXIT" task the same run.
 STEP 5  Persist + render — edit state.json; bump rev ONLY on real change; run render_plan.py (validates:
                            buckets == corpus, stop < entry < target); archive EVERYTHING fetched into
                            runs/<date>/ (the folder must stay usable offline and by other agents).
@@ -61,5 +64,6 @@ Every run writes `runs/<date>/run-summary.md` (prices, flows, breadth, news find
 
 ## Safety posture
 - The agent **never places orders**. Broker MCPs used here are read-only for trading; the human places every trade and confirms live prices.
+- The engine **holds cash by design** — dip buffer, staggered entries, add-zone discipline. "Fully invested" is not a goal; it's what the brakes are there to prevent at the wrong time.
 - User data (state, personal docs, runs, changelog) is gitignored — a fork/push can't leak it.
 - Educational tooling, not investment advice.
