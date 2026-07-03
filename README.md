@@ -96,15 +96,38 @@ Engineers: the full technical loop (state machine, rules, render pipeline) is in
 
 ## Install
 
+Three steps — clone, open your agent, paste one line:
+
 ```bash
-git clone https://github.com/Somchandra17/w-bonkers.git ~/stocks && cd ~/stocks
+# 1. clone into the folder that will hold your plan
+git clone https://github.com/Somchandra17/w-bonkers.git ~/stocks
+cd ~/stocks
+
+# 2. launch your agent inside it
+claude          # or: codex
 ```
 
-Open **Claude Code** or **Codex** in that folder and say:
+```text
+# 3. paste this — the agent takes it from there
+Read prompt.md and execute it.
+```
 
-> **"Read INSTALL.md and execute it."**
+That's the whole install. `prompt.md` drives everything from here: it checks your tooling and **installs + authorizes what's missing** (the Groww MCP setup includes a one-time browser OAuth — log in, click Allow; read-only access, ~7-hour sessions. Todoist asks for its login the same way), converts any PDFs you dropped in, interviews you, proposes your opening book for approval, installs your command, fills Todoist, and sets up scheduling. About 15 minutes.
 
-The installer interviews you (goals, docs, risk), converts your PDFs to markdown, reads your Groww holdings, proposes an opening book you approve line by line, installs a refresh command named by you, fills your Todoist project, and sets up scheduling. About 15 minutes. Prep tips: [docs/ONBOARDING.md](docs/ONBOARDING.md).
+### The interview — what it asks (with examples)
+
+| It asks | Example answer |
+|---|---|
+| What's the W you're chasing? | "grow ₹50k to ~₹70k in 9 months — aggressive, I can stomach a 30% drawdown" |
+| Investable corpus? | "46,000" — or say **"groww"** and it reads your account |
+| Horizon in months? | "9" |
+| Target return — stretch and realistic? | "stretch 60%, realistic 25–40%" — or **"you propose"** |
+| Risk appetite? | "aggressive — this is my speculative bucket" |
+| Guardrails (defaults: no options, forex, index derivatives, leverage)? | "keep defaults, and nothing below ₹1,000 cr market cap" |
+| Themes you want / refuse to touch? | "defence, power capex, EV suppliers — never tobacco" |
+| Holdings to keep forever (never rotated)? | "my 10 NMDC shares and the gold SIP — hands off" |
+
+Before the interview it also asks you to **drop personal docs in the folder** (salary PDF for tax context, broker statements, a mutual-fund screenshot — Groww's MCP can't read MFs, so you provide those). Everything stays local and gitignored. More prep tips: [docs/ONBOARDING.md](docs/ONBOARDING.md).
 
 ## The daily loop
 
@@ -136,7 +159,7 @@ Committed = code, templates, docs. **Generated = yours and gitignored**: `state.
 
 ## Upgrading
 
-`git pull`, then tell your agent: *"re-run INSTALL.md in upgrade mode"* — it regenerates the command and docs from the new templates using your stored answers, and never touches `state.json` without asking.
+`git pull`, then tell your agent: *"re-run prompt.md in upgrade mode"* — it regenerates the command and docs from the new templates using your stored answers, and never touches `state.json` without asking.
 
 ## Credits
 

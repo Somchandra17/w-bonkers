@@ -1,6 +1,6 @@
 # Onboarding — what the installer will ask you (human pre-read)
 
-INSTALL.md is executed by your agent, not by you — but it's *about* you. Two minutes of prep makes the interview sharp.
+`prompt.md` is executed by your agent, not by you — but it's *about* you. Two minutes of prep makes the interview sharp. (Every question comes with an example answer, and the installer also sets up + authorizes any missing MCP — Groww's browser OAuth, Todoist's login — before the interview starts.)
 
 ## Before you start: drop your documents in
 Copy into this folder (they stay local — everything personal is gitignored and never leaves your machine):

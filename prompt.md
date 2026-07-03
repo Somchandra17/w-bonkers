@@ -1,6 +1,6 @@
-# INSTALL.md — w-bonkers installer (executed by YOUR AI agent)
+# prompt.md — the w-bonkers installer prompt (executed by YOUR AI agent)
 
-> **Human:** open Claude Code or Codex in this folder and say: **"Read INSTALL.md and execute it."** Then just answer its questions. Prep tips: [docs/ONBOARDING.md](docs/ONBOARDING.md).
+> **Human:** you don't read this file — your agent does. Open Claude Code or Codex in this folder and say: **"Read prompt.md and execute it."** Then just answer its questions (each one comes with an example answer). Prep tips: [docs/ONBOARDING.md](docs/ONBOARDING.md).
 
 ---
 
@@ -17,9 +17,9 @@
    Execute only what they pick. **Never re-interview or overwrite `state.json` blindly.** Otherwise continue.
 
 ## Phase 1 — Tooling gate (hard requirements; before any portfolio work)
-Print a live ✅/❌ checklist and resolve every ❌ before moving on (each: fix → retry → or abort with a clear summary):
-1. **Groww MCP** — are `mcp__growwmcp__*` tools available? Verify with a REAL call (`get_equity_portfolio_holdings`). Missing/broken → walk through [docs/PREREQUISITES.md §2](docs/PREREQUISITES.md) (the Node-22 + `mcp-remote` + port-52155 wrapper), have the human complete the browser OAuth, re-verify.
-2. **Todoist MCP** — REQUIRED. Missing → say: *"Todoist is required for the feedback loop (you can swap it for another tool later — see docs/CUSTOMIZE.md). Set it up now? (guide me / abort)"* and guide per PREREQUISITES §3. A session restart is usually needed after registering an MCP — tell them, then resume at this phase (install.json remembers).
+Print a live ✅/❌ checklist and resolve every ❌ before moving on (each: fix → retry → or abort with a clear summary). **You INSTALL missing pieces yourself — don't just point at docs:**
+1. **Groww MCP** — are `mcp__growwmcp__*` tools available? Verify with a REAL call (`get_equity_portfolio_holdings`). Missing/broken → **install it now** per [docs/PREREQUISITES.md §2](docs/PREREQUISITES.md): `brew install node@22` if absent → write `~/.local/bin/groww-mcp.sh` (the Node-22 + `mcp-remote` + port-52155 wrapper) and `chmod +x` it → register it (`claude mcp add growwmcp -- ~/.local/bin/groww-mcp.sh`, or the `[mcp_servers]` block in `~/.codex/config.toml`). **Then the authorization step — say this explicitly:** *"A browser window will open for Groww's OAuth — log in and click Allow. This authorizes read-only access (prices, holdings, margins; it can NEVER place orders). Sessions last ~7 hours, after which the browser re-opens to re-authorize."* Re-verify with the real call after they authorize.
+2. **Todoist MCP** — REQUIRED. Missing → say: *"Todoist is required for the feedback loop (you can swap it for another tool later — see docs/CUSTOMIZE.md). Set it up now? (guide me / abort)"* — then **install and authorize it** per PREREQUISITES §3 (register the MCP, complete the Todoist login/authorization when prompted). A session restart is usually needed after registering any MCP — tell them, then resume at this phase (install.json remembers).
 3. **Skills** — check `~/.claude/skills/` for: `nse-vcp-screener`, `technical-analyst`, `india-news-tracker`, `fii-dii-flow-tracker`, `india-market-breadth`, `scenario-analyzer`. For any missing: `git clone https://github.com/ajeeshworkspace/indian-trading-skills` to a temp dir and copy the missing skill folders in. Re-verify all six.
 4. **python3 + deps** — `python3 -c "import yfinance"`; missing → `pip3 install yfinance pandas niftystocks` (offer `--user`/venv on PEP-668 systems).
 5. **Renderer sanity** — `python3 scripts/render_plan.py --check` should fail with "state.json not found" (expected pre-state; proves python + script work).
@@ -31,15 +31,15 @@ For each PDF found: read it with your own document reading (no pdf libraries), w
 **Mutual funds (explicit step — do not skip):** the Groww MCP exposes **stock holdings only** — it cannot read the user's mutual-fund portfolio. Say so, then ask: *"If you want mutual funds tracked in this plan (a fund sleeve, SIPs, or a keep-list), upload a screenshot or statement of your MF holdings — or just type them: fund name, invested amount / units, current value. Groww's MCP can't see them, so this is the only way. (or say 'no funds')."* Read whatever they provide (screenshots via your vision) and write `personal/mutual-funds.md`. This file becomes the source for state.json's `fund` block and `keep_not_rotated` — and every future refresh tracks MF legs from the user's ticks/comments only, never from broker data.
 
 ## Phase 3 — Goal interview
-Ask in order (accept free text; push gently for numbers):
-1. *"What's the W you're chasing? One or two lines — with numbers if you have them (corpus, target %, timeframe)."*
-2. *"Investable corpus in ₹?"* (or `groww` → read total account value and confirm)
-3. *"Horizon in months? (default 9)"*
-4. *"Target return — stretch and realistic? (or say 'you propose')"*
-5. *"Risk appetite: conservative / moderate / aggressive?"*
-6. *"Guardrails — default: no options, no forex, no index derivatives, no leverage. Keep or edit?"*
-7. *"Themes or stocks you want in the scan universe? Anything you refuse to touch?"*
-8. *"Existing holdings to KEEP forever (never rotated or sold by this plan)?"*
+Ask in order, **always showing the example** so the human knows what a good answer looks like (accept free text; push gently for numbers):
+1. *"What's the W you're chasing? One or two lines — numbers help. Example: 'grow ₹50,000 to ~₹70,000 in 9 months — aggressive, I can stomach a 30% drawdown' or 'steady 15–20% a year, low churn, sleep well'."*
+2. *"Investable corpus in ₹? Example: '46,000' — or just say 'groww' and I'll read your account total and confirm it with you."*
+3. *"Horizon in months? Example: '9' (default if you shrug)."*
+4. *"Target return — stretch and realistic? Example: 'stretch 60%, realistic 25–40%' — or say 'you propose' and I'll derive one from your risk appetite."*
+5. *"Risk appetite — conservative / moderate / aggressive? Example: 'aggressive — this is my speculative bucket, eyes open' or 'moderate — savings I'd hate to lose'."*
+6. *"Guardrails — default: no options, no forex, no index derivatives, no leverage. Keep or edit? Example: 'keep defaults, and also nothing below ₹1,000 cr market cap'."*
+7. *"Themes or stocks you want in the scan universe? Anything you refuse to touch? Example: 'defence, power capex, EV suppliers — never tobacco or paint stocks'."*
+8. *"Existing holdings to KEEP forever — never rotated or sold by this plan? Example: 'my 10 NMDC shares and the gold SIP — hands off'."*
 Record all answers in `install.json`.
 
 ## Phase 4 — Portfolio analysis → plan proposal

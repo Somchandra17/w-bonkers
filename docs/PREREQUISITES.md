@@ -1,6 +1,6 @@
 # Prerequisites
 
-Everything the installer (INSTALL.md) checks for — set these up before or during install. The installer walks you through any missing piece; nothing is faked.
+Everything the installer (`prompt.md`) checks for. You can set these up beforehand, or let the installer do it — **it installs and registers any missing piece itself and walks you through each authorization** (Groww = a one-time browser OAuth per ~7-hour session; Todoist = its login). Nothing is faked.
 
 ## 1. An agentic CLI (pick one or both)
 | | Claude Code | Codex CLI |
