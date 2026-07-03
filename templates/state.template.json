@@ -34,7 +34,13 @@
       "indicators": "RSI(14 Wilder), MACD(12,26,9), SMA 20/50/200, ATR(14), 52w hi/lo, 20-day swing low",
       "add_zone": "{{ADD_ZONE_TEXT}}",
       "min_switch_composite": 75,
-      "anti_whipsaw_days": 10
+      "anti_whipsaw_days": 10,
+      "regime_gate": {
+        "_comment": "Evidence: docs/BACKTEST.md — breakout buys taken while the index closed below its 200-DMA were net losers under every exit ruleset tested (exits are never gated). Set enabled:false to opt out.",
+        "enabled": true,
+        "benchmark_index": "NIFTY 50",
+        "no_new_buys_below": "200-DMA"
+      }
     },
     "bucket_labels": {
       "_comment": "Optional pretty names for buckets_inr keys; unknown keys fall back to Title Case."
