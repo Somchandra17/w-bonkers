@@ -1,0 +1,78 @@
+{
+  "_readme": "w-bonkers state file — THE single source of truth. The installer fills every {{PLACEHOLDER}}; the refresh command edits this file; scripts/render_plan.py regenerates every view from it. Never hand-edit rendered views. Delete the _readme/_comment keys after filling if you like — the renderer ignores them.",
+  "meta": {
+    "schema_version": 3,
+    "plan": "{{OWNER_NAME}} — {{PLAN_LABEL}}",
+    "plan_label": "{{PLAN_LABEL}}",
+    "owner": "{{OWNER_NAME}}",
+    "tag": "{{TAG}}",
+    "todoist_project": "{{TODOIST_PROJECT}}",
+    "command_name": "{{COMMAND_NAME}}",
+    "folder": "{{FOLDER_PATH}}",
+    "currency": "₹",
+    "market": "NSE",
+    "timezone": "Asia/Kolkata",
+    "rev": 1,
+    "last_refreshed": "{{INSTALL_DATETIME}}",
+    "prices_asof": "{{PRICES_ASOF}}",
+    "run_mode": "full",
+    "corpus_inr": "{{CORPUS_INR}}",
+    "goal": "{{GOAL_TEXT}}",
+    "horizon_months": "{{HORIZON_MONTHS}}",
+    "risk_appetite": "{{RISK_APPETITE}}",
+    "artifact_url": null,
+    "schedule_mode": "{{SCHEDULE_MODE}}",
+    "guardrails": ["no options", "no forex", "no index derivatives", "no leverage"],
+    "next_review": {"date": "{{FIRST_REVIEW_DATE}}", "reason": "{{FIRST_REVIEW_REASON}}"},
+    "processed_comment_ids": [],
+    "pinned": {
+      "_comment": "FIXED inputs the refresh command reads every run — edit HERE to change strategy inputs, never edit the command file.",
+      "universe": "{{UNIVERSE_CSV}}",
+      "broad_universe": "nifty200",
+      "vcp_custom": "--trend-min-score 55 --min-contractions 2 --contraction-ratio 0.8",
+      "vcp_broad": "--trend-min-score 70 --min-contractions 2",
+      "indicators": "RSI(14 Wilder), MACD(12,26,9), SMA 20/50/200, ATR(14), 52w hi/lo, 20-day swing low",
+      "add_zone": "{{ADD_ZONE_TEXT}}",
+      "min_switch_composite": 75,
+      "anti_whipsaw_days": 10
+    },
+    "bucket_labels": {
+      "_comment": "Optional pretty names for buckets_inr keys; unknown keys fall back to Title Case."
+    }
+  },
+  "regime": {
+    "verdict": "{{REGIME_VERDICT}}",
+    "asof": "{{INSTALL_DATE}}",
+    "note": "{{REGIME_NOTE}}"
+  },
+  "tax": null,
+  "buckets_inr": {
+    "_comment_delete_me": "REPLACE with your buckets. Keys are yours to choose (e.g. stocks / fund_sleeve / event_earmark / dip_buffer). Values MUST sum exactly to meta.corpus_inr — the renderer validates this.",
+    "stocks": 0,
+    "dip_buffer": 0
+  },
+  "positions": [
+    {
+      "_comment_delete_me": "One object per stock leg. Shape (all fields): ticker, theme, role core|small|conditional, status pending|done, action BUY|SELL, shares int, amount_inr int, entry '910-940' or 'reclaim 422', stop number, target '1150-1200', due 'YYYY-MM-DD' or null, trigger text or null (null due => trigger task), todoist_task_id null (backfilled by sync), note text. When filled add: done_on, fill.",
+      "ticker": "EXAMPLE",
+      "theme": "Example theme",
+      "role": "core",
+      "status": "pending",
+      "action": "BUY",
+      "shares": 0,
+      "amount_inr": 0,
+      "entry": "0-0",
+      "stop": 0,
+      "target": "0-0",
+      "due": null,
+      "trigger": "replace me",
+      "todoist_task_id": null,
+      "note": "delete this example object"
+    }
+  ],
+  "fund": null,
+  "ipo": null,
+  "watchlist": [],
+  "keep_not_rotated": [],
+  "rotate_out": []
+}

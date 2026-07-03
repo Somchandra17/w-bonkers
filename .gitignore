@@ -1,0 +1,26 @@
+# ── user data — never committable ──────────────────────────────
+/state.json
+/state.json.*
+/install.json
+/personal/
+/runs/
+/context/
+/CHANGELOG.md
+/RUNBOOK.md
+/MANIFEST.json
+/FEEDBACK.md
+
+# ── rendered views (regenerable from state.json) ────────────────
+/board.html
+/_artifact-source.html
+/tasks.md
+/tasks.ics
+/todoist_tasks.json
+
+# ── documents & junk ────────────────────────────────────────────
+*.pdf
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+.claude/settings.local.json

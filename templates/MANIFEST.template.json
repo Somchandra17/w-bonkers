@@ -1,0 +1,46 @@
+{
+  "name": "w-bonkers-plan",
+  "description": "Self-contained, agent-driven stock plan ({{PLAN_LABEL}}). Everything needed to analyze or continue this plan offline lives in this folder. state.json is the single source of truth; every other view is generated from it.",
+  "owner": "{{OWNER_NAME}}",
+  "updated": "{{INSTALL_DATE}}",
+  "engine": "w-bonkers (https://github.com/Somchandra17/w-bonkers)",
+  "agents_guide": {
+    "start_here": ["state.json", "CHANGELOG.md", "RUNBOOK.md", "docs/PIPELINE.md"],
+    "rules": [
+      "state.json is canonical; never trust a rendered view over it",
+      "views are regenerated with: python3 scripts/render_plan.py (never hand-edit the HTML)",
+      "default decision is NO CHANGE; the deterministic rules live in the installed command (copy: context/command-installed.md) and RUNBOOK.md",
+      "a BUY is 'done' only when FILLED on the exchange, not when an order is placed",
+      "the owner places every trade manually — no agent ever places orders"
+    ]
+  },
+  "files": {
+    "state.json": "SOURCE OF TRUTH. meta (rev, corpus, goal, pinned inputs, next_review, processed_comment_ids), regime, buckets_inr (must sum to corpus), positions[] (ticker, status pending|done, entry/stop/target, shares, fill, todoist_task_id), optional tax/fund/ipo, watchlist, keep_not_rotated, rotate_out.",
+    "state.json.prev": "snapshot taken before each run (rollback point)",
+    "state.json.bak": "backup written by render_plan.py on each render",
+    "scripts/render_plan.py": "deterministic renderer + validator (--check). Regenerates all views from state.json.",
+    "scripts/run_refresh.sh": "cron wrapper — gates on meta.next_review.date, then runs the agent headlessly",
+    "CHANGELOG.md": "append-only decision history; one dated entry per run explaining what changed and why",
+    "board.html": "standalone action board; opens offline in any browser",
+    "_artifact-source.html": "body-only variant for an optional hosted artifact (meta.artifact_url)",
+    "tasks.md": "human checklist view",
+    "tasks.ics": "calendar view of dated actions",
+    "todoist_tasks.json": "deterministic task-sync payload (ref, title, due, description with buy/stop/target) — deliberately tool-agnostic",
+    "runs/<YYYY-MM-DD>/run-summary.md": "per-day run log: prices captured, flows/breadth/scenario numbers, news findings, screen results, rule verdicts, actions taken",
+    "runs/<YYYY-MM-DD>/screens-<HHMM>/": "raw screener output exactly as generated",
+    "RUNBOOK.md": "OFFLINE MANUAL: current book with all levels, daily/monthly manual checklists, decision rules in plain language",
+    "personal/": "the owner's documents (PDF originals + markdown conversions) — private, gitignored",
+    "context/": "mirror of the agent's persistent memory notes about this plan (re-synced every run)",
+    "install.json": "installer answers + versions (drives idempotent re-install/upgrade)",
+    "MANIFEST.json": "this file"
+  },
+  "pinned_inputs": {
+    "universe": "{{UNIVERSE_CSV}}",
+    "vcp_params_custom": "--trend-min-score 55 --min-contractions 2 --contraction-ratio 0.8",
+    "vcp_params_broad": "--trend-min-score 70 --min-contractions 2",
+    "indicators": "RSI(14 Wilder), MACD(12,26,9), SMA 20/50/200, ATR(14), 52w hi/lo, 20-day swing low",
+    "add_zone": "{{ADD_ZONE_TEXT}}",
+    "guardrails": {{GUARDRAILS_JSON}}
+  },
+  "disclaimer": "Educational analysis, not investment advice. All trades are placed manually by the owner at live prices."
+}
